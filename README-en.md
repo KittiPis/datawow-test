@@ -1,6 +1,3 @@
-# datawow-test
-Technical assessment project for the Data Wow recruitment process.
-
 # DataWow Technical Assessment
 
 This repository contains a full-stack technical assessment project for the **Data Wow** recruitment process.  
