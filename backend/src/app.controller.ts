@@ -10,7 +10,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // 👇 เพิ่มเมธอดใหม่สำหรับ /healthz
+  // 👇healthz
   @Get('healthz')
   getHealthCheck() {
     return { status: 'ok' };
