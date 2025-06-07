@@ -7,16 +7,16 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('login_logs')
 export class LoginLog {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'user_id' })
-  user: User | null;
+  user: UserEntity | null;
 
   @Column()
   action: string; // ✅ NOT NULL ต้องใส่แน่ๆ

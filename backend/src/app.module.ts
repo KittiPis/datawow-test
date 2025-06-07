@@ -5,6 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { MastersModule } from './masters/masters.module';
+import { PostsModule } from './posts/posts.module';
+import { CommentsModule } from './comments/comments.module';
+import { ActivityLogModule } from './activity-log/activity-log.module';
 
 @Module({
   imports: [
@@ -18,6 +22,10 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    MastersModule,
+    PostsModule,
+    CommentsModule,
+    ActivityLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

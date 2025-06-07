@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
-import { User } from '../../entities/user.entity';
+import { UserEntity } from '../../entities/user.entity';
 import { LoginLog } from '../../entities/login_log.entity';
 import { Request } from 'express';
 import { JwtPayload } from './jwt-payload.interface';
@@ -10,8 +10,8 @@ import { JwtPayload } from './jwt-payload.interface';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepo: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
     @InjectRepository(LoginLog)
     private readonly logRepo: Repository<LoginLog>,
     private readonly jwtService: JwtService, // ✅ ต้องมี

@@ -1,8 +1,9 @@
-// src/entities/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { PostEntity } from './post.entity';
+import { CommentEntity } from './comment.entity';
 
 @Entity('user_datawow')
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,4 +24,11 @@ export class User {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
+
+  // 👇 เพิ่ม relation แบบ reverse mapping
+  @OneToMany(() => PostEntity, (post) => post.author)
+  posts: PostEntity[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.user)
+  comments: CommentEntity[];
 }

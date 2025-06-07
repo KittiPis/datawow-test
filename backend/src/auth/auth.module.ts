@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { User } from '../../entities/user.entity';
+import { UserEntity } from '../../entities/user.entity';
 import { LoginLog } from '../../entities/login_log.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
@@ -13,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true, // ✅ เพื่อให้ทุกโมดูลใช้ได้
     }),
-    TypeOrmModule.forFeature([User, LoginLog]),
+    TypeOrmModule.forFeature([UserEntity, LoginLog]),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'fallback-secret',
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '1d' },
