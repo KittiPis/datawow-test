@@ -83,7 +83,7 @@ export class PostsService {
   }
 
   async getPostDetail(postId: number) {
-    // 1. ดึงโพสต์พร้อม author + category
+    // 1. getPost : author + category
     const post = await this.postRepository.findOne({
       where: {
         id: postId,
@@ -98,7 +98,7 @@ export class PostsService {
       throw new NotFoundException(`Post with id ${postId} not found`);
     }
 
-    // 2. ดึงคอมเมนต์ของโพสต์นั้น
+    // 2. get comments
     const comments = await this.commentRepository.find({
       where: {
         post: { id: postId },
@@ -255,6 +255,7 @@ export class PostsService {
     post.is_active = false;
     await this.postRepo.save(post);
 
+    //log activity
     await this.activityLogService.logActivity({
       userId: user.sub,
       action: 'delete_post',

@@ -5,13 +5,13 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // GET /users → ดึงผู้ใช้ทั้งหมด
+  // GET /users : all
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
-  // GET /users/:id → ดึงผู้ใช้ตาม ID
+  // GET /users/:id : BY ID
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.userService.findOne(+id);

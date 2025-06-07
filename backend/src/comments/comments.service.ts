@@ -25,7 +25,7 @@ export class CommentsService {
 
   async createComment(
     dto: CreateCommentDto,
-    user: JwtPayload, // มาจาก @GetUser()
+    user: JwtPayload,
   ) {
     const post = await this.postRepo.findOne({
       where: {
@@ -49,10 +49,10 @@ export class CommentsService {
     const comment = this.commentRepo.create({
       content: dto.content,
       post,
-      user: author, // ✅ ตอนนี้ไม่เป็น null แล้ว
+      user: author,
     });
 
-    const saved = await this.commentRepo.save(comment); // ✅ ไม่ใส่ array
+    const saved = await this.commentRepo.save(comment);
 
     await this.activityLogService.logActivity({
       userId: user.sub,

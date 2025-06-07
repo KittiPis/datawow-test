@@ -11,7 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // ✅ เพื่อให้ทุกโมดูลใช้ได้
+      isGlobal: true,
     }),
     TypeOrmModule.forFeature([UserEntity, LoginLog]),
     JwtModule.register({

@@ -25,7 +25,7 @@ export class UserEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
-  // 👇 เพิ่ม relation แบบ reverse mapping
+  //relation แบบ reverse mapping
   @OneToMany(() => PostEntity, (post) => post.author)
   posts: PostEntity[];
 

@@ -18,7 +18,7 @@ import { ActivityLogModule } from './activity-log/activity-log.module';
       url: process.env.POSTGRES_URL,
       ssl: { rejectUnauthorized: false },
       autoLoadEntities: true,
-      synchronize: false, // ✅ ปิดเพื่อความปลอดภัย
+      synchronize: false,
     }),
     UserModule,
     AuthModule,

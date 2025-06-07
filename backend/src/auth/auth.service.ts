@@ -14,7 +14,7 @@ export class AuthService {
     private readonly userRepo: Repository<UserEntity>,
     @InjectRepository(LoginLog)
     private readonly logRepo: Repository<LoginLog>,
-    private readonly jwtService: JwtService, // ✅ ต้องมี
+    private readonly jwtService: JwtService,
   ) {}
 
   async login(username: string, req: Request): Promise<string | null> {

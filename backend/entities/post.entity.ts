@@ -46,7 +46,6 @@ export class PostEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'now()' })
   updated_at: Date;
 
-  // Relations
   @ManyToOne(() => UserEntity, (user) => user.posts)
   @JoinColumn({ name: 'user_id' })
   author: UserEntity;

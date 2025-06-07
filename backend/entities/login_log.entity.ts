@@ -19,7 +19,7 @@ export class LoginLog {
   user: UserEntity | null;
 
   @Column()
-  action: string; // ✅ NOT NULL ต้องใส่แน่ๆ
+  action: string;
 
   @Column({ nullable: true })
   ip_address: string;
@@ -33,6 +33,6 @@ export class LoginLog {
   @CreateDateColumn()
   created_at: Date;
 
-  @CreateDateColumn({ name: 'login_at' }) // redundancy (ใช้ created_at อย่างเดียวก็ได้)
+  @CreateDateColumn({ name: 'login_at' })
   loginAt: Date;
 }

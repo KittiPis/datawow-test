@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity'; // ← ต้อง import มาให้ถูก
+import { UserEntity } from './user.entity';
 
 @Entity('activity_logs')
 export class ActivityLogEntity {

@@ -21,7 +21,6 @@ export class CategoryEntity {
   @Column({ type: 'timestamp', default: () => 'now()' })
   updated_at: Date;
 
-  // 👇 เพิ่มส่วนนี้ลงไปที่ class นี้ (อาจไว้ล่างสุด)
   @OneToMany(() => PostEntity, (post) => post.category)
   posts: PostEntity[];
 }
