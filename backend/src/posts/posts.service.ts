@@ -273,6 +273,7 @@ export class PostsService {
   async getMyPosts(userId: number, limit: number, offset: number) {
     const query = this.postRepository
       .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'user')
       .leftJoinAndSelect('post.category', 'category')
       .where('post.user_id = :userId', { userId })
       .andWhere('post.is_active = true')
