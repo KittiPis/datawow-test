@@ -297,15 +297,15 @@ export class PostsService {
         return {
           id: post.id,
           title: post.title,
-          content: post.content,
+          summary: post.content.slice(0, 200),
           created_at: post.created_at,
           comment_count: commentCount,
-          category: post.category
-            ? {
-                id: post.category.id,
-                name: post.category.name,
-              }
-            : null,
+          category: {
+            id: post.category?.id,
+            name: post.category?.name,
+            slug: post.category?.slug,
+          },
+          author: post.author?.username || 'Unknown',
         };
       }),
     );
