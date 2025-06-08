@@ -20,6 +20,7 @@ export function PostCard({ post }: Props) {
   const isMyPostsPage = pathname === "/our-blog";
 
   const [showEditModal, setShowEditModal] = useState(false);
+  
 
   return (
     <>

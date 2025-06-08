@@ -1,8 +1,8 @@
-import type { Post } from "@/types/types";
+import type { PostPre } from "@/types/types";
 import { PostCard } from './PostCard';
 
 interface PostListProps {
-  posts: Post[] | null; // ✅ รับได้ทั้ง array หรือ null
+  posts: PostPre[] | null; // ✅ รับได้ทั้ง array หรือ null
 }
 
 export function PostList({ posts }: PostListProps) {

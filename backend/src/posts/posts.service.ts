@@ -67,7 +67,10 @@ export class PostsService {
           id: post.id,
           title: post.title,
           summary: post.content.slice(0, 200), // ตัด content ย่อ
-          author: post.author?.username || 'Unknown',
+          author: {
+            id: post.author.id,
+            username: post.author.username,
+          },
           category: {
             id: post.category?.id,
             name: post.category?.name,
@@ -306,7 +309,10 @@ export class PostsService {
             name: post.category?.name,
             slug: post.category?.slug,
           },
-          author: post.author?.username || 'Unknown',
+          author: {
+            id: post.author.id,
+            username: post.author.username,
+          },
         };
       }),
     );

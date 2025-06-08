@@ -5,6 +5,7 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { MenuCategories } from "@/components/MenuCategories";
 import type { Category, PostPre } from "@/types/types";
 import { PATCHPost } from "@/lib/apiPosts";
+import { useRouter } from "next/navigation";
 
 interface EditPostModalProps {
   isOpen: boolean;
@@ -13,7 +14,10 @@ interface EditPostModalProps {
 }
 
 export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
-  const [selectedCategory, setSelectedCategory] = useState<Category>(post.category);
+  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState<Category>(
+    post.category
+  );
   const [categoryId, setCategoryId] = useState<number>(post.category.id);
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.summary); // ใช้ summary ชั่วคราว (ถ้าไม่มี content จริง)
@@ -50,6 +54,7 @@ export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
       setLoading(true);
       await PATCHPost(post.id, categoryId, title, content);
       console.log("✅ Post updated");
+      router.refresh(); //
       onClose();
     } catch (err) {
       console.error("❌ Failed to update post", err);
@@ -66,7 +71,9 @@ export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel className="w-full max-w-md md:max-w-xl rounded-md bg-white p-6 transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
-            <DialogTitle className="text-lg font-semibold">Edit Post</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">
+              Edit Post
+            </DialogTitle>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-600 text-xl"

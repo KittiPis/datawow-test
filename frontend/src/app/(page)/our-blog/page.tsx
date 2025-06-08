@@ -4,31 +4,25 @@ import { useEffect, useState } from "react";
 import { getMyPosts, getPostsSelect } from "@/lib/apiPosts";
 import { PostList } from "@/components/PostList";
 import { useCategory } from "@/context/CategoryContext";
-import type { Post } from "@/types/types";
+import type { PostPre } from "@/types/types";
 
 export default function MyPostsPage() {
   const { selectedCategory } = useCategory();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostPre[]>([]);
 
   useEffect(() => {
     const fetchInitialPosts = async () => {
       const allPosts = await getMyPosts(); // ✅ โหลดครั้งแรก
       setPosts(allPosts ?? []);
-      
     };
     fetchInitialPosts();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchByCategory = async () => {
-  //     if (selectedCategory?.id !== undefined) {
-  //       const result = await getPostsSelect(selectedCategory.id);
-  //       setPosts(result ?? []);
-  //     }
-  //   };
-
-  //   fetchByCategory();
-  // }, [selectedCategory?.id]);
+  // ✅ โหลดใหม่เมื่อมีการแก้ไข
+  const reloadPosts = async () => {
+    const result = await getMyPosts(); // หรือ getAllPosts ตามต้องการ
+    setPosts(result ?? []);
+  };
 
   return (
     <div className="min-h-screen">

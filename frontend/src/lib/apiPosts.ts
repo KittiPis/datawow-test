@@ -13,7 +13,7 @@ import type { Post, PostPre } from "@/types/types";
 //   created_at: string;
 // }
 
-export async function getAllPosts(): Promise<Post[] | null> {
+export async function getAllPosts(): Promise<PostPre[] | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
     const res = await fetch(`${baseUrl}/api/posts/summary?limit=100&offset=0`, {
@@ -35,7 +35,7 @@ export async function getAllPosts(): Promise<Post[] | null> {
   }
 }
 
-export async function getMyPosts(): Promise<Post[] | null> {
+export async function getMyPosts(): Promise<PostPre[] | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
     const res = await fetch(

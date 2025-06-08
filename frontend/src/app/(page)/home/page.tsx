@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { getAllPosts, getPostsSelect } from "@/lib/apiPosts";
 import { PostList } from "@/components/PostList";
 import { useCategory } from "@/context/CategoryContext";
-import type { Post } from "@/types/types";
+import type { PostPre } from "@/types/types";
 
 export default function HomePage() {
   const { selectedCategory } = useCategory();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostPre[]>([]);
 
   useEffect(() => {
     const fetchInitialPosts = async () => {
