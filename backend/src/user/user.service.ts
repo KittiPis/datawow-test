@@ -1,4 +1,3 @@
-// ✅ ต้องมี import เพิ่มเติม
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

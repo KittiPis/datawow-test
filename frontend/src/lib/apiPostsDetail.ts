@@ -1,20 +1,4 @@
-export interface Post {
-  id: number;
-  title: string;
-  content: string;
-  author: {
-    id: number;
-    username: string;
-  };
-  category: {
-    id: number;
-    name: string;
-    slug: string;
-  };
-  comment_count: number;
-  created_at: string;
-  comments?: Comment[]; // 👈 เพิ่มตรงนี้
-}
+import type { Post } from "@/types/types";
 
 export interface Comment {
   id: number;
@@ -25,9 +9,6 @@ export interface Comment {
     username: string;
   };
 }
-/**
- * ดึงโพสต์เดี่ยวจาก /api/posts/{id}
- */
 export async function getPostsDetail(id: number): Promise<Post | null> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -45,8 +26,7 @@ export async function getPostsDetail(id: number): Promise<Post | null> {
 
     const data = await res.json();
     return data;
-  } catch (error) {
-    console.error("Fetch post error:", error);
+  } catch {
     return null;
   }
 }

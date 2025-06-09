@@ -39,9 +39,9 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'user')
       .leftJoinAndSelect('post.category', 'category')
-      //   .where('COALESCE(post.is_active, true) = true')
-      //   .andWhere('COALESCE(post.is_deleted, false) = false')
-      //   .andWhere('COALESCE(post.is_hidden, false) = false')
+      .where('COALESCE(post.is_active, true) = true')
+      .andWhere('COALESCE(post.is_deleted, false) = false')
+      .andWhere('COALESCE(post.is_hidden, false) = false')
       .orderBy('post.created_at', 'DESC')
       .skip(offset)
       .take(limit);
@@ -52,7 +52,6 @@ export class PostsService {
 
     const posts = await query.getMany();
 
-    // ดึง comment count ต่อโพสต์
     const result = await Promise.all(
       posts.map(async (post) => {
         const commentCount = await this.commentRepository.count({
@@ -66,7 +65,7 @@ export class PostsService {
         return {
           id: post.id,
           title: post.title,
-          summary: post.content.slice(0, 200), // ตัด content ย่อ
+          summary: post.content.slice(0, 200),
           author: {
             id: post.author.id,
             username: post.author.username,
@@ -86,13 +85,12 @@ export class PostsService {
   }
 
   async getPostDetail(postId: number) {
-    // 1. getPost : author + category
     const post = await this.postRepository.findOne({
       where: {
         id: postId,
-        // is_active: true,
-        // is_deleted: false,
-        // is_hidden: false,
+        is_active: true,
+        is_deleted: false,
+        is_hidden: false,
       },
       relations: ['author', 'category'],
     });
@@ -101,7 +99,6 @@ export class PostsService {
       throw new NotFoundException(`Post with id ${postId} not found`);
     }
 
-    // 2. get comments
     const comments = await this.commentRepository.find({
       where: {
         post: { id: postId },
@@ -168,7 +165,6 @@ export class PostsService {
 
     const saved = await this.postRepo.save(newPost);
 
-    //log activity
     await this.activityLogService.logActivity({
       userId: user.sub,
       action: 'create_post',

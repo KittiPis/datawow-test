@@ -17,7 +17,6 @@ export class MastersService {
       order: { id: 'ASC' },
     });
 
-    // map entity → DTO
     return categories.map((cat) => ({
       id: cat.id,
       name: cat.name,

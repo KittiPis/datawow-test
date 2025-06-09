@@ -16,8 +16,7 @@ export async function login(username: string): Promise<boolean> {
     });
 
     return res.ok;
-  } catch (error) {
-    console.error("Login error:", error);
+  } catch {
     return false;
   }
 }
@@ -29,13 +28,12 @@ export async function fetchUser(): Promise<User | null> {
     });
 
     const data: User = await res.json();
-    // เช็กว่ามี username หรือไม่ เป็นตัวตัดสินว่า valid มั้ย
     if (data && data.username) {
       return data;
     }
 
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -54,10 +52,16 @@ export async function logoutUser(): Promise<LogoutResponse> {
       message: data.error || "Logout failed",
       code: data.code,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    let message = "Network error. Please try again.";
+
+    if (error instanceof Error) {
+      message = error.message;
+    }
+
     return {
       success: false,
-      message: error?.message || "Network error. Please try again.",
+      message,
       code: 500,
     };
   }

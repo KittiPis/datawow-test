@@ -3,33 +3,36 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { MenuCategories } from "@/components/MenuCategories";
-import type { Category, PostPre } from "@/types/types";
+import type { Category, Post } from "@/types/types";
 import { PATCHPost } from "@/lib/apiPosts";
-import { useRouter } from "next/navigation";
 
 interface EditPostModalProps {
   isOpen: boolean;
   onClose: () => void;
-  post: PostPre;
+  post: Post;
+  onUpdated: () => void;
 }
 
-export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
-  const router = useRouter();
+export function EditPostModal({
+  isOpen,
+  onClose,
+  post,
+  onUpdated,
+}: EditPostModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<Category>(
     post.category
   );
   const [categoryId, setCategoryId] = useState<number>(post.category.id);
   const [title, setTitle] = useState(post.title);
-  const [content, setContent] = useState(post.summary); // ใช้ summary ชั่วคราว (ถ้าไม่มี content จริง)
+  const [content, setContent] = useState(post.summary);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // อัปเดตค่าเริ่มต้นใหม่เมื่อ post เปลี่ยน (เช่น เปิด modal อันใหม่)
   useEffect(() => {
     setSelectedCategory(post.category);
     setCategoryId(post.category.id);
     setTitle(post.title);
-    setContent(post.summary); // สมมติว่าไม่มี content จริง
+    setContent(post.summary);
     setError(null);
   }, [post]);
 
@@ -41,24 +44,22 @@ export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
 
   const handleSubmit = async () => {
     if (categoryId === 0) {
-      setError("กรุณาเลือกหมวดหมู่");
+      setError("Please select a category");
       return;
     }
 
-    if (!title.trim() || !content.trim()) {
-      setError("กรุณากรอกชื่อหัวข้อและเนื้อหา");
+    if (!title?.trim() || !content?.trim()) {
+      setError("Please enter both a title and content");
       return;
     }
 
     try {
       setLoading(true);
       await PATCHPost(post.id, categoryId, title, content);
-      console.log("✅ Post updated");
-      router.refresh(); //
+      onUpdated();
       onClose();
     } catch (err) {
-      console.error("❌ Failed to update post", err);
-      setError("เกิดข้อผิดพลาดในการอัปเดตโพสต์");
+      setError("Oops! Something went wrong while submitting your post." + err);
     } finally {
       setLoading(false);
     }
@@ -68,7 +69,7 @@ export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
 
-      <div className="fixed inset-0 flex items-center justify-center p-4">
+      <div className="fixed inset-0 flex items-center justify-center ">
         <DialogPanel className="w-full max-w-md md:max-w-xl rounded-md bg-white p-6 transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
             <DialogTitle className="text-lg font-semibold">
@@ -81,15 +82,11 @@ export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
               &times;
             </button>
           </div>
-
           <div className="space-y-4">
-            {/* หมวดหมู่ */}
             <MenuCategories
               selectedCategory={selectedCategory}
               onSelect={handleCategorySelect}
             />
-
-            {/* หัวข้อ */}
             <input
               type="text"
               value={title}
@@ -101,7 +98,6 @@ export function EditPostModal({ isOpen, onClose, post }: EditPostModalProps) {
               className="w-full border rounded-md px-3 py-2 text-sm focus:ring focus:outline-none"
             />
 
-            {/* เนื้อหา */}
             <textarea
               value={content}
               onChange={(e) => {

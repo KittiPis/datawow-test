@@ -8,12 +8,12 @@ import {
   useRef,
   useMemo,
   ReactNode,
+  useCallback,
 } from "react";
 import { useRouter } from "next/navigation";
 import { fetchUser, logoutUser } from "@/lib/apilogin";
-import { User } from "@/types/types"; // ✅ ใช้ตัวเดียวกับที่ fetchUser คืน
+import { User } from "@/types/types";
 
-// ✅ Interface สำหรับ context
 interface AuthContextType {
   user: User | null | undefined;
   login: () => Promise<{ success: boolean; error?: string }>;
@@ -23,7 +23,6 @@ interface AuthContextType {
   decodedRole: string | null;
 }
 
-// ✅ Interface สำหรับ context
 interface AuthContextType {
   user: User | null | undefined;
   login: () => Promise<{ success: boolean; error?: string }>;
@@ -33,10 +32,8 @@ interface AuthContextType {
   decodedRole: string | null;
 }
 
-// ✅ สร้าง context ด้วย type
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// ✅ Props สำหรับ AuthProvider
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -49,29 +46,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const ENABLE_AUTO_REFRESH = true;
 
-  const safeRequestIdleCallback =
-    typeof window !== "undefined" && "requestIdleCallback" in window
-      ? window.requestIdleCallback
-      : (cb: IdleRequestCallback) => setTimeout(cb, 0);
+  const safeRequestIdleCallback = useMemo(() => {
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      return window.requestIdleCallback;
+    }
+    return (cb: IdleRequestCallback) => setTimeout(cb, 0);
+  }, []);
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     if (isFetchingRef.current) return;
 
     isFetchingRef.current = true;
     setIsFetching(true);
 
     const userData = await fetchUser();
-    setUser(userData ?? null); // ✅ ไม่เช็ก .code แล้ว
+    setUser(userData ?? null);
 
     setIsFetching(false);
     isFetchingRef.current = false;
-  };
+  }, []);
 
-  const reloadUser = async () => {
+  const reloadUser = useCallback(async () => {
     if (!isFetchingRef.current) {
       await loadUser();
     }
-  };
+  }, [isFetchingRef, loadUser]);
 
   useEffect(() => {
     loadUser();
@@ -84,12 +83,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           loadUser();
         });
       }
-    }, 3 * 60 * 1000); // ทุก 3 นาที
+    }, 3 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [loadUser, ENABLE_AUTO_REFRESH, safeRequestIdleCallback]);
 
-  const login = async (): Promise<{ success: boolean; error?: string }> => {
+  const login = useCallback(async (): Promise<{
+    success: boolean;
+    error?: string;
+  }> => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     const userData = await fetchUser();
 
@@ -100,18 +102,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } else {
       return { success: false, error: "Invalid session or user not found" };
     }
-  };
+  }, [router]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await logoutUser();
     setUser(null);
     router.push("/login");
-  };
+  }, [router]);
 
   let decodedRole: string | null = null;
   try {
     decodedRole = user?.username ? user.username.toString() : null;
-  } catch (err) {
+  } catch {
     decodedRole = null;
   }
 

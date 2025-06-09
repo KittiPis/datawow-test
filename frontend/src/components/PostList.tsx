@@ -1,27 +1,29 @@
-import type { PostPre } from "@/types/types";
-import { PostCard } from './PostCard';
+import type { Post } from "@/types/types";
+import { PostCard } from "./PostCard";
 
-interface PostListProps {
-  posts: PostPre[] | null; // ✅ รับได้ทั้ง array หรือ null
-}
-
-export function PostList({ posts }: PostListProps) {
+export function PostList({
+  posts,
+  onUpdated,
+}: {
+  posts: Post[] | null;
+  onUpdated: () => void;
+}) {
   if (posts === null) {
     return (
       <div className="text-red-500 text-sm">
-        🚨 โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่ภายหลัง
+        Failed to load data. Please try again later.
       </div>
     );
   }
 
   if (posts.length === 0) {
-    return <p className="text-gray-500">ยังไม่มีกระทู้</p>;
+    return <p className="text-gray-500 text-center">No posts yet</p>;
   }
 
   return (
     <div className="space-y-0">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} onUpdated={onUpdated} />
       ))}
     </div>
   );

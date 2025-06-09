@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    
+
     if (!res.ok) {
       throw new Error("Failed to fetch posts from external API");
     }
@@ -21,9 +21,8 @@ export async function GET(req: NextRequest) {
     const data = await res.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("[GET /api/posts]", error);
     return NextResponse.json(
-      { error: "Failed to fetch posts" },
+      { error: "Failed to fetch posts" + error },
       { status: 500 }
     );
   }

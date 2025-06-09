@@ -5,20 +5,15 @@ export async function GET(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
     const { searchParams, pathname } = req.nextUrl;
 
-    // ✂️ ตัด /api/posts ออก
     const extractedPath = pathname.replace(/^\/api\/posts/, "") || "/summary";
 
-    // ✅ เช็กว่าเป็น summary หรือ my-posts
     const isSummary = extractedPath.startsWith("/summary");
     const isMyposts = extractedPath.startsWith("/my-posts");
 
-    // ✅ ถ้าเข้าเงื่อนไข → ต่อ query string
     const shouldAppendQuery = isSummary || isMyposts;
     const queryString = shouldAppendQuery ? `?${searchParams.toString()}` : "";
 
-    // ✅ สร้าง URL
     const url = `${process.env.URL_API_DATAWOW}/posts${extractedPath}${queryString}`;
-    console.log("Final URL:", url);
 
     const res = await fetch(url, {
       method: "GET",
@@ -33,9 +28,8 @@ export async function GET(req: NextRequest) {
     const data = await res.json();
     return NextResponse.json(data);
   } catch (err) {
-    console.error("[GET /api/posts/[...slug]]", err);
     return NextResponse.json(
-      { error: "Failed to fetch posts" },
+      { error: "Failed to fetch posts" + err },
       { status: 500 }
     );
   }
@@ -59,7 +53,6 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    // ดึง post ID จาก URL
     const postIdMatch = req.nextUrl.pathname.match(/\/api\/posts\/(\d+)/);
     const postId = postIdMatch?.[1];
 
@@ -67,9 +60,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Invalid post ID" }, { status: 400 });
     }
 
-    // เตรียม URL ไปยัง backend จริง
     const url = `${process.env.URL_API_DATAWOW}/posts/${postId}`;
-    console.log("📦 PATCH to:", url);
 
     const res = await fetch(url, {
       method: "PATCH",
@@ -81,8 +72,6 @@ export async function PATCH(req: NextRequest) {
     });
 
     if (!res.ok) {
-      const errorText = await res.text();
-      console.error("[External API Error]", errorText);
       return NextResponse.json(
         { error: "Failed to update post" },
         { status: res.status }
@@ -92,9 +81,49 @@ export async function PATCH(req: NextRequest) {
     const data = await res.json();
     return NextResponse.json(data);
   } catch (err) {
-    console.error("[PATCH /api/posts/[id]]", err);
     return NextResponse.json(
-      { error: "Unexpected error while updating post" },
+      { error: "Unexpected error while updating post" + err },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const token = req.cookies.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const postIdMatch = req.nextUrl.pathname.match(/\/api\/posts\/(\d+)/);
+    const postId = postIdMatch?.[1];
+
+    if (!postId) {
+      return NextResponse.json({ error: "Invalid post ID" }, { status: 400 });
+    }
+
+    const url = `${process.env.URL_API_DATAWOW}/posts/${postId}`;
+
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      return NextResponse.json(
+        { error: "Failed to delete post" + errorText },
+        { status: res.status }
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json(
+      { error: "Unexpected error while deleting post" + err },
       { status: 500 }
     );
   }

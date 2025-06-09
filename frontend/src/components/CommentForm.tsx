@@ -12,9 +12,8 @@ type Props = {
 export function CommentForm({ onSubmit, onCancel, placeholder }: Props) {
   const [text, setText] = useState("");
   const [isMobile, setIsMobile] = useState(false);
-  const [show, setShow] = useState(false); // 🔄 สำหรับ delay animation
+  const [show, setShow] = useState(false);
 
-  // ตรวจหน้าจอ
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)");
     const update = () => setIsMobile(media.matches);
@@ -23,10 +22,9 @@ export function CommentForm({ onSubmit, onCancel, placeholder }: Props) {
     return () => media.removeEventListener("change", update);
   }, []);
 
-  // แสดง modal แบบ fade-in เมื่อ isMobile เปลี่ยนเป็น true
   useEffect(() => {
     if (isMobile) {
-      const timer = setTimeout(() => setShow(true), 10); // 💡 delay transition trigger
+      const timer = setTimeout(() => setShow(true), 10);
       return () => clearTimeout(timer);
     } else {
       setShow(false);

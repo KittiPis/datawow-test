@@ -1,4 +1,3 @@
-// src/utils/authUtils.ts
 export function isLoggedIn(): boolean {
   if (typeof document === "undefined") return false;
 

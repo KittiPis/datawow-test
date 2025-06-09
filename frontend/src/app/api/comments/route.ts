@@ -4,7 +4,6 @@ export async function POST(req: NextRequest) {
   try {
     const token = req.cookies.get("token")?.value;
 
-    // ❗ หากไม่มี token → รีเทิร์น 401
     if (!token) {
       return NextResponse.json(
         { error: "Unauthorized: missing token" },
@@ -12,11 +11,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ✅ ดึง body ที่ส่งเข้ามา
     const body = await req.json();
     const { post_id, content } = body;
 
-    // ✅ ตรวจสอบข้อมูลเบื้องต้น
     if (!post_id || !content || typeof content !== "string") {
       return NextResponse.json(
         { error: "Missing or invalid post_id or content" },
@@ -36,8 +33,6 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok) {
-      const errorText = await res.text();
-      console.error("[External API Error]", errorText);
       return NextResponse.json(
         { error: "Failed to post comment" },
         { status: res.status }
@@ -48,9 +43,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(data, { status: 201 });
   } catch (err) {
-    console.error("[POST /api/comments]", err);
     return NextResponse.json(
-      { error: "Unexpected error while posting comment" },
+      { error: "Unexpected error while posting comment" + err },
       { status: 500 }
     );
   }

@@ -23,7 +23,7 @@ The project demonstrates frontend and backend integration using **Next.js** and 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/datawow-test.git
+git clone https://github.com/KittiPis/datawow-test.git
 cd datawow-test
 ```
 
@@ -107,8 +107,8 @@ PORT=3001
 
 ## 🧑‍💻 Author
 
-- Your Name Here
-- [Your GitHub](https://github.com/your-username)
+- Kitti Pidsmsi
+- [Your GitHub](https://github.com/KittiPis)
 
 ---
 

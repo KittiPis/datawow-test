@@ -3,12 +3,11 @@ import { notFound } from "next/navigation";
 import { PostDetailClient } from "@/components/PostDetailClient";
 
 export default async function PostDetailPage(props: {
-  params: { id?: string };
+  params: { id: string };
 }) {
   const params = await Promise.resolve(props.params);
-  const rawId = params.id;
-  if (!rawId) return notFound();
-  const id = parseInt(rawId, 10);
+
+  const id = parseInt(params.id, 10);
   if (isNaN(id)) return notFound();
 
   const post = await getPostsDetail(id);

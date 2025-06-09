@@ -42,11 +42,11 @@ export function MenuCategories({
   }, []);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative w-full text-left">
       <Menu as="div" className="relative">
         <div>
           <MenuButton
-            className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow ring-1 ring-gray-300
+            className="w-full inline-flex items-center gap-x-1.5 rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow ring-1 ring-gray-300
            hover:bg-gray-50 focus:outline-none"
           >
             {selectedCategory?.name || "Community"}
@@ -66,7 +66,7 @@ export function MenuCategories({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50">
+          <MenuItems className="absolute inset-x-0 mx-auto mt-2 max-w-xs origin-top rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50">
             <div className="py-1">
               {categories.length === 0 && (
                 <div className="px-4 py-2 text-sm text-gray-500">
@@ -78,7 +78,6 @@ export function MenuCategories({
                   key={category.id}
                   onClick={() => onSelect(category)}
                   as="a"
-                  //href={`#`}
                   className="block px-4 py-2 text-sm text-gray-700 ui-active:bg-gray-100 ui-active:text-gray-900 cursor-default"
                 >
                   {category.name}

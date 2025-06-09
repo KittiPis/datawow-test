@@ -14,10 +14,13 @@ const defaultCategory: Category = {
   slug: "community",
 };
 
-const CategoryContext = createContext<CategoryContextType | undefined>(undefined);
+const CategoryContext = createContext<CategoryContextType | undefined>(
+  undefined
+);
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedCategory, setSelectedCategory] = useState<Category>(defaultCategory);
+  const [selectedCategory, setSelectedCategory] =
+    useState<Category>(defaultCategory);
 
   return (
     <CategoryContext.Provider value={{ selectedCategory, setSelectedCategory }}>

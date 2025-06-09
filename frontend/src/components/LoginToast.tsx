@@ -1,13 +1,15 @@
-// components/LoginToast.tsx
-'use client'
+"use client";
 
-import { Transition } from '@headlessui/react'
-import { InboxIcon, XMarkIcon ,ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { Transition } from "@headlessui/react";
+import {
+  XMarkIcon,
+  ExclamationTriangleIcon,
+} from "@heroicons/react/24/outline";
 
 type Props = {
-  show: boolean
-  onClose: () => void
-}
+  show: boolean;
+  onClose: () => void;
+};
 
 export function LoginToast({ show, onClose }: Props) {
   return (
@@ -29,26 +31,34 @@ export function LoginToast({ show, onClose }: Props) {
             <div className="p-4">
               <div className="flex items-start">
                 <div className="shrink-0">
-                  <ExclamationTriangleIcon aria-hidden="true" className="h-6 w-6 text-yellow-500" />
+                  <ExclamationTriangleIcon
+                    aria-hidden="true"
+                    className="h-6 w-6 text-yellow-500"
+                  />
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
-                  <p className="text-sm font-semibold text-gray-900">กรุณาเข้าสู่ระบบ</p>
-                  <p className="mt-1 text-sm text-gray-500">คุณต้อง Login ก่อนจึงจะแสดงความคิดเห็นได้</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    Please log in
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    You must log in before you can post a comment.
+                  </p>
                   <div className="mt-3 flex space-x-4">
                     <button
                       onClick={() => (window.location.href = "/login")}
                       className="text-sm text-green-600 hover:underline"
                     >
-                      ไป Login
+                      Go to Login
                     </button>
                     <button
                       onClick={onClose}
                       className="text-sm text-gray-600 hover:underline"
                     >
-                      ปิด
+                      Close
                     </button>
                   </div>
                 </div>
+
                 <div className="ml-4 flex shrink-0">
                   <button
                     onClick={onClose}
@@ -63,5 +73,5 @@ export function LoginToast({ show, onClose }: Props) {
         </Transition>
       </div>
     </div>
-  )
+  );
 }

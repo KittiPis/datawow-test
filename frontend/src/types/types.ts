@@ -1,4 +1,3 @@
-// types.ts
 export interface LoginResponse {
   success: boolean;
   message: string;
@@ -8,7 +7,7 @@ export interface LoginResponse {
 export interface AuthApiResponse {
   code: number;
   error?: string;
-  [key: string]: any; // เผื่อมีฟิลด์เพิ่มเติม เช่น user info
+  [key: string]: unknown;
 }
 
 export interface Category {
@@ -27,30 +26,27 @@ export type Comment = {
   };
 };
 
-// PostPre (จาก API)
 export type PostPre = {
   id: number;
   title: string;
   summary: string;
-  author: string; // ❗ string
+  author: string;
   category: { id: number; name: string; slug: string };
   comment_count: number;
   created_at: string;
 };
 
-// Post (ใน UI)
 export type Post = {
   id: number;
   title: string;
-  content: string;     // ❗ ต้องเติมเพิ่ม
-  summary: string;
+  content: string;
+  summary?: string;
   created_at: string;
   category: { id: number; name: string; slug: string };
-  author: { id: number; username: string }; // ❗ ต้องแปลงจาก string
+  author: { id: number; username: string };
   comment_count: number;
-  comments: Comment[]; // ❗ ต้องเติมเพิ่ม
+  comments: Comment[];
 };
-
 
 export interface User {
   sub: number;
@@ -58,11 +54,28 @@ export interface User {
   role: string;
   iat: number;
   exp: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface ApiResponse<T> {
   code: number;
   data?: T;
   error?: string;
+}
+
+
+export interface PatchPostResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id: number;
+    title: string;
+    content: string;
+    category_id: number;
+  };
+}
+
+export interface DeletePostResponse {
+  success: boolean;
+  message: string;
 }

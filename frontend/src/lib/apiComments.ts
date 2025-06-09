@@ -1,17 +1,5 @@
-// 📁 src/lib/apiCategories.ts
-type Comment = {
-  id: number;
-  content: string;
-  created_at: string;
-  user: {
-    id: number;
-    username: string;
-  };
-};
 
 export async function postComment(post_id: number, content: string) {
-
-    console.log("post_id : ",post_id,content)
   try {
     const res = await fetch("/api/comments", {
       method: "POST",
@@ -22,15 +10,12 @@ export async function postComment(post_id: number, content: string) {
     });
 
     if (!res.ok) {
-      const errorText = await res.text();
-      console.error("Failed to post comment:", errorText);
-      throw new Error(`POST /api/comments failed: ${res.status}`);
+      throw new Error(`POST comments failed: ${res.status}`);
     }
 
     const data = await res.json();
-    return data; // ✅ data = { id, content, created_at, user }
+    return data;
   } catch (err) {
-    console.error("Error posting comment:", err);
     throw err;
   }
 }

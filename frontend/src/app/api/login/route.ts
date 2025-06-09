@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 
-// ✅ ตั้งชื่อไม่ซ้ำกับของ jsonwebtoken
 interface UserPayload {
   sub: number;
   username: string;
@@ -12,7 +11,6 @@ interface UserPayload {
 export async function POST(req: Request) {
   try {
     const { username } = await req.json();
-    //const response = await fetch(`${process.env.URL_API_MEDICINE}/user/login`, {
     const externalRes = await fetch(
       `${process.env.URL_API_DATAWOW}/auth/login`,
       {
@@ -23,17 +21,13 @@ export async function POST(req: Request) {
     );
 
     if (!externalRes.ok) {
-      console.log("externalRes :", externalRes);
       return new Response(JSON.stringify({ error: "Invalid username" }), {
         status: 401,
       });
     }
 
-    console.log("externalRes :", process.env.URL_API_DATAWOW);
-
     const { access_token } = await externalRes.json();
 
-    // ✅ decode & verify แล้ว check ว่าผลลัพธ์เป็น object
     const decoded = jwt.verify(access_token, process.env.JWT_SECRET as string);
 
     if (typeof decoded !== "object" || !decoded || !("username" in decoded)) {
@@ -42,10 +36,8 @@ export async function POST(req: Request) {
       });
     }
 
-    // ✅ cast แบบไม่ชน
     const user = decoded as unknown as UserPayload;
 
-    // 🍪 set cookie และส่งข้อมูลกลับ
     const res = new Response(
       JSON.stringify({
         success: true,
@@ -68,8 +60,7 @@ export async function POST(req: Request) {
 
     return res;
   } catch (err) {
-    console.error("Login error:", err);
-    return new Response(JSON.stringify({ error: "Login failed" }), {
+    return new Response(JSON.stringify({ error: "Login failed" + err }), {
       status: 500,
     });
   }

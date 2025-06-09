@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { MenuCategories } from "@/components/MenuCategories";
 import type { Category } from "@/types/types";
 import { createPost } from "@/lib/apiPosts";
@@ -13,14 +9,9 @@ import { createPost } from "@/lib/apiPosts";
 interface CreatePostModalProps {
   isOpen: boolean;
   onClose: () => void;
-  categories: Category[];
 }
 
-export function CreatePostModal({
-  isOpen,
-  onClose,
-  categories,
-}: CreatePostModalProps) {
+export function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<Category>({
     id: 0,
     name: "Community",
@@ -31,24 +22,22 @@ export function CreatePostModal({
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false); // ✅ state โหลด
+  const [loading, setLoading] = useState(false);
 
   const handlePost = async () => {
     if (categoryId === 0) {
-      setError("กรุณาเลือกหมวดหมู่");
+      setError("Please select a category");
       return;
     }
     if (!title.trim() || !content.trim()) {
-      setError("กรุณากรอกชื่อหัวข้อและเนื้อหา");
+      setError("Please enter both a title and content");
       return;
     }
 
     try {
       setLoading(true);
       await createPost(categoryId, title, content);
-      console.log("✅ Post created");
 
-      // Reset
       setTitle("");
       setContent("");
       setCategoryId(0);
@@ -60,8 +49,7 @@ export function CreatePostModal({
       setError(null);
       onClose();
     } catch (err) {
-      console.error("❌ Failed to create post", err);
-      setError("เกิดข้อผิดพลาดในการส่งโพสต์");
+      setError("Oops! Something went wrong while submitting your post." + err);
     } finally {
       setLoading(false);
     }
@@ -70,7 +58,7 @@ export function CreatePostModal({
   const handleCategorySelect = (category: Category) => {
     setSelectedCategory(category);
     setCategoryId(category.id);
-    setError(null); // clear error ทันที
+    setError(null);
   };
 
   return (
@@ -92,13 +80,11 @@ export function CreatePostModal({
           </div>
 
           <div className="space-y-4">
-            {/* หมวดหมู่ */}
             <MenuCategories
               selectedCategory={selectedCategory}
               onSelect={handleCategorySelect}
             />
 
-            {/* หัวข้อ */}
             <input
               type="text"
               value={title}
@@ -110,7 +96,6 @@ export function CreatePostModal({
               className="w-full border rounded-md px-3 py-2 text-sm focus:ring focus:outline-none"
             />
 
-            {/* เนื้อหา */}
             <textarea
               value={content}
               onChange={(e) => {
@@ -122,7 +107,6 @@ export function CreatePostModal({
               className="w-full border rounded-md px-3 py-2 text-sm focus:ring focus:outline-none resize-none"
             />
 
-            {/* แสดง error แบบนุ่ม */}
             {error && (
               <div className="text-sm text-red-600 font-medium animate-fade-in">
                 {error}
@@ -130,7 +114,6 @@ export function CreatePostModal({
             )}
           </div>
 
-          {/* ปุ่ม */}
           <div className="flex justify-end gap-3 mt-6">
             <button
               onClick={onClose}

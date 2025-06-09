@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/apilogin";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -19,24 +20,25 @@ export default function LoginPage() {
       router.push("/home");
     } else {
       setError(
-        "Login failed\nคุณสามารถเข้าใช้งานแบบไม่ล็อกอินได้ แต่จะเข้าได้แค่หน้า Home เท่านั้น\nหากต้องการใช้งานอื่น ๆ ระบบจะพาคุณกลับมาล็อกอินอีกครั้ง"
+        "Login failed.\nYou can continue without logging in, but access will be limited to the Home page only.\nIf you try to access other features, the system will redirect you to log in again."
       );
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* ✅ Mobile only header */}
-      <div className="block md:hidden bg-[#2F5F3E] flex flex-col items-center justify-center pt-40 pb-10 px-6 rounded-b-[2rem]">
-        <img
+      <div className=" md:hidden bg-[#2F5F3E] flex flex-col items-center justify-center pt-40 pb-10 px-6 rounded-b-[2rem]">
+        <Image
           src="/login-art.png"
           alt="Login Illustration"
+          width={128}
+          height={128}
           className="w-32 h-auto mb-2"
         />
+
         <p className="text-white italic text-lg">a Board</p>
       </div>
 
-      {/* Left Section (Form) */}
       <div className="flex-1 flex items-center justify-center bg-[#1E2D24] py-10">
         <form
           onSubmit={handleSubmit}
@@ -54,7 +56,6 @@ export default function LoginPage() {
             className="w-full px-4 py-2 rounded border text-white border-gray-300 focus:outline-none"
           />
 
-          {/* ✅ แสดง error หลายบรรทัดแบบจัดสไตล์ */}
           {error && (
             <div className="text-sm space-y-1">
               {error.split("\n").map((line, idx) => (
@@ -70,12 +71,11 @@ export default function LoginPage() {
                 </p>
               ))}
 
-              {/* ✅ เพิ่มลิงก์ไปหน้า home */}
               <Link
                 href="/home"
                 className="block text-center mt-2 text-sm text-green-400 underline hover:text-green-300"
               >
-                เข้าสู่ระบบแบบไม่ล็อกอิน → ไปหน้า Home
+                Access without logging in Go to Home page
               </Link>
             </div>
           )}
@@ -89,11 +89,12 @@ export default function LoginPage() {
         </form>
       </div>
 
-      {/* ✅ Desktop only section */}
       <div className="flex-1 hidden md:flex flex-col items-center justify-center bg-[#2F5F3E] rounded-bl-[2rem]">
-        <img
+        <Image
           src="/login-art.png"
           alt="Login Illustration"
+          width={200}
+          height={150}
           className="w-auto h-auto mb-4 m-4"
         />
         <p className="text-white italic text-xl">a Board</p>

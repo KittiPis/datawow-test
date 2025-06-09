@@ -1,4 +1,3 @@
-// src/lib/apiCategories.ts
 import { Category } from "@/types/types";
 
 export async function getCategories(): Promise<Category[] | null> {
@@ -17,8 +16,7 @@ export async function getCategories(): Promise<Category[] | null> {
 
     const data = await res.json();
     return data;
-  } catch (error) {
-    console.error("Fetch categories error:", error);
+  } catch {
     return null;
   }
 }
