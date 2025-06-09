@@ -38,7 +38,7 @@ export function LoginToast({ show, onClose }: Props) {
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
                   <p className="text-sm font-semibold text-gray-900">
-                    Please log in
+                    Please login
                   </p>
                   <p className="mt-1 text-sm text-gray-500">
                     You must log in before you can post a comment.

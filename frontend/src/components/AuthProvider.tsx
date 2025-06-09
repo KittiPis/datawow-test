@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const router = useRouter();
   const isFetchingRef = useRef<boolean>(false);
+  const [decodedRole, setDecodedRole] = useState<string | null>(null);
 
   const ENABLE_AUTO_REFRESH = true;
 
@@ -110,12 +111,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     router.push("/login");
   }, [router]);
 
-  let decodedRole: string | null = null;
-  try {
-    decodedRole = user?.username ? user.username.toString() : null;
-  } catch {
-    decodedRole = null;
-  }
+  useEffect(() => {
+    if (user?.username) {
+      setDecodedRole(user.username);
+    } else {
+      setDecodedRole(null);
+    }
+  }, [user]);
 
   const authValue = useMemo<AuthContextType>(
     () => ({
