@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getMyPosts, getPostsSelect } from "@/lib/apiPosts";
+import { getMyPosts, gettMyPostsSelect } from "@/lib/apiPosts";
 import { PostList } from "@/components/PostList";
 import { useCategory } from "@/context/CategoryContext";
 import type { Post } from "@/types/types";
@@ -36,7 +36,7 @@ export default function MyPostsPage() {
 
   const reloadPosts = async () => {
     if (selectedCategory?.id !== undefined) {
-      const result = await getPostsSelect(selectedCategory.id);
+      const result = await gettMyPostsSelect(selectedCategory.id);
       setPosts(result ?? []);
     } else {
       const allPosts = await getMyPosts();
@@ -47,7 +47,7 @@ export default function MyPostsPage() {
   useEffect(() => {
     const fetchByCategory = async () => {
       if (selectedCategory?.id !== undefined) {
-        const result = await getPostsSelect(selectedCategory.id);
+        const result = await gettMyPostsSelect(selectedCategory.id);
         setPosts(result ?? []);
       }
     };

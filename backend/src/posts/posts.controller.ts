@@ -24,7 +24,7 @@ export class PostsController {
 
   @Get('summary')
   async getPostSummaries(
-    @Query('limit', new ParseIntPipe({ errorHttpStatusCode: 400 })) limit = 10,
+    @Query('limit', new ParseIntPipe({ errorHttpStatusCode: 400 })) limit = 100,
     @Query('offset', new ParseIntPipe({ errorHttpStatusCode: 400 })) offset = 0,
     @Query('category_id') categoryId?: string,
   ) {
@@ -45,10 +45,36 @@ export class PostsController {
   @Get('my-posts')
   async getMyPosts(
     @GetUser() user: JwtPayload,
-    @Query('limit', new ParseIntPipe({ errorHttpStatusCode: 400 })) limit = 10,
+    @Query('limit', new ParseIntPipe({ errorHttpStatusCode: 400 })) limit = 100,
     @Query('offset', new ParseIntPipe({ errorHttpStatusCode: 400 })) offset = 0,
   ) {
     return this.postsService.getMyPosts(user.sub, limit, offset);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('my-posts-summary')
+  async getMyPostsSummary(
+    @GetUser() user: JwtPayload,
+    @Query('limit', new ParseIntPipe({ errorHttpStatusCode: 400 })) limit = 10,
+    @Query('offset', new ParseIntPipe({ errorHttpStatusCode: 400 })) offset = 0,
+    @Query('category_id') categoryId?: string,
+  ) {
+    const parsedCategoryId = categoryId ? parseInt(categoryId, 10) : undefined;
+
+    if (limit < 1) {
+      throw new BadRequestException('limit must be greater than 0');
+    }
+
+    if (offset < 0) {
+      throw new BadRequestException('offset must be 0 or greater');
+    }
+
+    return this.postsService.getMyPostSummaries(
+      user.sub,
+      limit,
+      offset,
+      parsedCategoryId,
+    );
   }
 
   @Get(':id')

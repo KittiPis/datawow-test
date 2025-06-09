@@ -34,7 +34,7 @@ export class PostsService {
     private readonly activityLogService: ActivityLogService,
   ) {}
 
-  async getPostSummaries(limit = 10, offset = 0, categoryId?: number) {
+  async getPostSummaries(limit = 100, offset = 0, categoryId?: number) {
     const query = this.postRepository
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'user')
@@ -82,6 +82,62 @@ export class PostsService {
     );
 
     return result;
+  }
+
+  async getMyPostSummaries(
+    userId: number,
+    limit: number,
+    offset: number,
+    categoryId?: number,
+  ) {
+    const query = this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'user')
+      .leftJoinAndSelect('post.category', 'category')
+      .where('post.user_id = :userId', { userId })
+      .andWhere('post.is_active = true')
+      .andWhere('post.is_deleted = false')
+      .andWhere('post.is_hidden = false')
+      .orderBy('post.created_at', 'DESC')
+      .skip(offset)
+      .take(limit);
+
+    if (categoryId) {
+      query.andWhere('post.category_id = :categoryId', { categoryId });
+    }
+
+    const posts = await query.getMany();
+
+    const results = await Promise.all(
+      posts.map(async (post) => {
+        const commentCount = await this.commentRepository.count({
+          where: {
+            post: { id: post.id },
+            is_active: true,
+            is_deleted: false,
+          },
+        });
+
+        return {
+          id: post.id,
+          title: post.title,
+          summary: post.content.slice(0, 200),
+          created_at: post.created_at,
+          comment_count: commentCount,
+          category: {
+            id: post.category?.id,
+            name: post.category?.name,
+            slug: post.category?.slug,
+          },
+          author: {
+            id: post.author.id,
+            username: post.author.username,
+          },
+        };
+      }),
+    );
+
+    return results;
   }
 
   async getPostDetail(postId: number) {

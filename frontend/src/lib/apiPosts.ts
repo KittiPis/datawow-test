@@ -1,4 +1,8 @@
-import type { Post, PatchPostResponse ,DeletePostResponse } from "@/types/types";
+import type {
+  Post,
+  PatchPostResponse,
+  DeletePostResponse,
+} from "@/types/types";
 
 export async function getAllPosts(): Promise<Post[] | null> {
   try {
@@ -39,6 +43,30 @@ export async function getMyPosts(): Promise<Post[] | null> {
     }
 
     const data = await res.json();
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+export async function gettMyPostsSelect(
+  category_id: number
+): Promise<Post[] | null> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    const res = await fetch(
+      `${baseUrl}/api/posts/my-posts-summary?limit=100&offset=0&category_id=${category_id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Failed to fetch posts");
+
+    const data: Post[] = await res.json();
     return data;
   } catch {
     return null;

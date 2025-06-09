@@ -8,7 +8,9 @@ export async function GET(req: NextRequest) {
     const extractedPath = pathname.replace(/^\/api\/posts/, "") || "/summary";
 
     const isSummary = extractedPath.startsWith("/summary");
-    const isMyposts = extractedPath.startsWith("/my-posts");
+    const isMyposts =
+      extractedPath.startsWith("/my-posts") ||
+      extractedPath.startsWith("/my-posts-summary");
 
     const shouldAppendQuery = isSummary || isMyposts;
     const queryString = shouldAppendQuery ? `?${searchParams.toString()}` : "";
