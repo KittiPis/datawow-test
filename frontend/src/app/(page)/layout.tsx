@@ -128,7 +128,7 @@ export default function PageLayout({
                             aria-hidden="true"
                             className="mr-4 text-sm/6 font-semibold text-white"
                           >
-                            {decodedRole || ""}
+                            {decodedRole }
                           </span>
                         </span>
                         <Image
